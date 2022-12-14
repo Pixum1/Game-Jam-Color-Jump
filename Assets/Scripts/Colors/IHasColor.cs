@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IHasColor
 {
-    public void ChangeColor(ColorID _color);
+    public void SetColor(ColorID _color);
     public void SetToNextColorInCycle();
+    public void SetToPreviousColorInCycle();
 }

@@ -25,7 +25,7 @@ public class ColorManager : MonoBehaviour
         // ColorID not found in container
         return null;
     }
-    public ColorID GetNextColor(ColorID _id)
+    public ColorID GetNextColorInCycle(ColorID _id)
     {
         for (int i = 0; i < container.Colors.Length; i++)
         {
@@ -37,5 +37,22 @@ public class ColorManager : MonoBehaviour
         }
 
         return ColorID.None;
+    }
+    public ColorID GetPreviousColorInCycle(ColorID _id)
+    {
+        for (int i = 0; i < container.Colors.Length; i++)
+        {
+            if ((int)_id <= 0) 
+                return (ColorID)(container.Colors.Length - 1);
+
+            if (container.Colors[i].ColorID == _id - 1)
+                return _id - 1;
+        }
+
+        return ColorID.None;
+    }
+    public ColorID GetRandomColor()
+    {
+        return (ColorID)Random.Range(0, container.Colors.Length);
     }
 }

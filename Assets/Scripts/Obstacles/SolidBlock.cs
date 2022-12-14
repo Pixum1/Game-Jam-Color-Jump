@@ -2,35 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D), typeof(SpriteRenderer))]
+[RequireComponent(typeof(EdgeCollider2D), typeof(SpriteRenderer))]
 public class SolidBlock : MonoBehaviour, IHasColor
 {
     public ScriptableColor ActiveColor { get; private set; }
 
-    private BoxCollider2D col;
+    private EdgeCollider2D col;
     private SpriteRenderer sprRend;
-
-    private void Awake()
-    {
-        col = GetComponent<BoxCollider2D>();
-        sprRend = GetComponent<SpriteRenderer>();
-    }
-
-    private void Start()
-    {
-        ChangeColor(ColorID.Red);
-    }
 
     public void Init(ColorID _color)
     {
-        ChangeColor(_color);
+        col = GetComponent<EdgeCollider2D>();
+        sprRend = GetComponent<SpriteRenderer>();
+
+        //transform.localScale = new Vector3(Random.Range(1f, 4f), .25f);
+
+        SetColor(_color);
     }
-    public void ToggleCollider()
+    public void DeactivateBlock()
     {
-        col.enabled = !col.enabled;
+        col.enabled = false;
+        sprRend.color = new Color(sprRend.color.r, sprRend.color.g, sprRend.color.b, .5f);
+
+    }
+    public void ActivateBlock()
+    {
+        col.enabled = true;
+        sprRend.color = new Color(sprRend.color.r, sprRend.color.g, sprRend.color.b, 1);
     }
 
-    public void ChangeColor(ColorID _color)
+    public void SetColor(ColorID _color)
     {
         ActiveColor = ColorManager.Instance.GetColorByID(_color);
         sprRend.color = ActiveColor.Color;
@@ -38,6 +39,12 @@ public class SolidBlock : MonoBehaviour, IHasColor
 
     public void SetToNextColorInCycle()
     {
-        ChangeColor(ColorManager.Instance.GetNextColor(ActiveColor.ColorID));
+        SetColor(ColorManager.Instance.GetNextColorInCycle(ActiveColor.ColorID));
+    }
+
+    public void SetToPreviousColorInCycle()
+    {
+        SetColor(ColorManager.Instance.GetPreviousColorInCycle(ActiveColor.ColorID));
+
     }
 }
