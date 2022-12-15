@@ -13,7 +13,7 @@ public class BlockManager : MonoBehaviour
     private int spawnX;
     private int spawnY;
     private float camSize { get { return Camera.main.orthographicSize; } }
-    private int blocksToSpawn { get { return (int)(camSize * .75f); } }
+    private int blocksToSpawn { get { return (int)(camSize * 1.15f); } }
 
     private void OnEnable()
     {

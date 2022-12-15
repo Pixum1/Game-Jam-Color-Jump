@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour, IHasColor
 {
     public ScriptableColor ActiveColor { get; private set; }
@@ -11,11 +10,11 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float maxJumpSpeed;
 
     private SpriteRenderer sprRend;
     private Rigidbody2D rb;
     private BoxCollider2D col;
+    private Animator anim;
 
     private void Awake()
     {
@@ -23,6 +22,7 @@ public class PlayerController : MonoBehaviour, IHasColor
         sprRend = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
+        anim = GetComponent<Animator>();
         #endregion
     }
 
@@ -36,17 +36,28 @@ public class PlayerController : MonoBehaviour, IHasColor
         rb.velocity = new Vector2(0, rb.velocity.y);
 
         if (rb.velocity.y > 0)
+        {
             col.enabled = false;
-        else col.enabled = true;
+        }
+        else if (rb.velocity.y < 0)
+        {
+            anim.SetTrigger("Fall");
+            col.enabled = true;
+        }
 
         Move();
 
-        if (Input.GetMouseButtonDown(0))
+        HandleColorChange();
+    }
+
+    private void HandleColorChange()
+    {
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
         {
             SetToPreviousColorInCycle();
             e_ColorChanged?.Invoke();
         }
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.C) || Input.GetMouseButtonDown(1))
         {
             SetToNextColorInCycle();
             e_ColorChanged?.Invoke();
@@ -86,6 +97,7 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     private void Jump()
     {
+        anim.SetTrigger("Jump");
         rb.AddForce(Vector2.up * jumpForce);
     }
 
