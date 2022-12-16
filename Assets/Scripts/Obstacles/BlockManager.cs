@@ -14,7 +14,7 @@ public class BlockManager : MonoBehaviour
     private int spawnX;
     private int spawnY;
     private float camSize { get { return Camera.main.orthographicSize; } }
-    private int blocksToSpawn { get { return (int)(camSize * 1.15f); } }
+    private int blocksToSpawn { get { return (int)(camSize * 1.5f); } }
 
     private void OnEnable()
     {
@@ -45,7 +45,19 @@ public class BlockManager : MonoBehaviour
         for (int i = 0; i < blocksToSpawn; i++)
         {
             spawnX = (int)Random.Range(-camSize, camSize);
-            spawnY = (int)this.transform.position.y + (int)Random.Range(-camSize/2f, camSize);
+            spawnY = (int)this.transform.position.y + (int)Random.Range(-camSize / 2f, camSize);
+
+            int limit = 100;
+
+            while (BlockOnSameLevel(new Vector2(spawnX, spawnY)))
+            {
+                if (limit <= 0) break;
+
+                spawnX = (int)Random.Range(-camSize, camSize);
+                spawnY = (int)this.transform.position.y + (int)Random.Range(-camSize / 2f, camSize);
+
+                limit--;
+            }
 
             pool.Get();
         }
@@ -65,9 +77,9 @@ public class BlockManager : MonoBehaviour
             for (int i = 0; i < blocksToSpawn - pool.CountActive; i++)
             {
                 spawnX = (int)Random.Range(-camSize, camSize);
-                spawnY = (int)this.transform.position.y + (int)camSize + (int)Random.Range(.5f, 2f);
+                spawnY = (int)this.transform.position.y + (int)camSize + (int)Random.Range(1f, 4f);
 
-                if (BlockOnSameLevel(spawnY)) continue;
+                if (BlockOnSameLevel(new Vector2(spawnX, spawnY))) continue;
 
                 pool.Get();
             }
@@ -88,11 +100,17 @@ public class BlockManager : MonoBehaviour
         }
     }
 
-    private bool BlockOnSameLevel(int _yPos)
+    private bool BlockOnSameLevel(Vector2 _vec)
     {
         for (int i = 0; i < blocks.Count; i++)
         {
-            if (blocks[i].transform.position.y == _yPos)
+            if (blocks[i].transform.position == (Vector3)_vec)
+                return true;
+            if (blocks[i].transform.position == (Vector3)_vec + Vector3.right)
+                return true;
+            if (blocks[i].transform.position == (Vector3)_vec - Vector3.right)
+                return true;
+            if (blocks[i].transform.position.y == _vec.y)
                 return true;
         }
 

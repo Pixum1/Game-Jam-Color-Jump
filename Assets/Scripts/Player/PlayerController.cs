@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour, IHasColor
     private Rigidbody2D rb;
     private BoxCollider2D col;
     private Animator anim;
+    private bool started;
 
     private float borderCoords { get { return Camera.main.orthographicSize * 1.333f; } }
 
@@ -36,10 +37,14 @@ public class PlayerController : MonoBehaviour, IHasColor
         SetColor(ColorID.Red);
 
         e_ColorChanged?.Invoke();
+
+        Time.timeScale = 0;
     }
 
     private void Update()
     {
+        HandleColorChange();
+
         rb.velocity = new Vector2(0, rb.velocity.y);
 
         if (rb.velocity.y > 0)
@@ -57,8 +62,6 @@ public class PlayerController : MonoBehaviour, IHasColor
 
         Move();
 
-        HandleColorChange();
-
         if (this.transform.position.x < -borderCoords)
             this.transform.position = new Vector2(-borderCoords, this.transform.position.y);
         else if (this.transform.position.x > borderCoords)
@@ -69,18 +72,30 @@ public class PlayerController : MonoBehaviour, IHasColor
     {
         if (Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
         {
+            if (!started)
+            {
+                GameManager.Instance.Started = true;
+                started = true;
+                Time.timeScale = 1;
+                return;
+            }
+
             SetToPreviousColorInCycle();
             e_ColorChanged?.Invoke();
         }
         if (Input.GetKeyDown(KeyCode.C) || Input.GetMouseButtonDown(1))
         {
+            if (!started)
+            {
+                GameManager.Instance.Started = true;
+                started = true;
+                Time.timeScale = 1;
+                return;
+            }
+
             SetToNextColorInCycle();
             e_ColorChanged?.Invoke();
         }
-    }
-
-    private void ChangeTrailColor()
-    {
     }
 
     private void Move()
@@ -118,6 +133,8 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     private void OnCollisionEnter2D(Collision2D _other)
     {
+        if (!started) return;
+
         IHasColor otherObject = _other.gameObject.GetComponent<IHasColor>();
 
         if (otherObject != null)
@@ -129,6 +146,8 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     private void OnTriggerEnter2D(Collider2D _other)
     {
+        if (!started) return;
+
         if (_other.CompareTag("Player"))
             DestroyColorObject();
     }
