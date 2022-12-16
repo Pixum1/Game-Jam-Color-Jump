@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float maxJumpSpeed;
 
+    private TrailRenderer trailRend;
     private SpriteRenderer sprRend;
     private Rigidbody2D rb;
     private BoxCollider2D col;
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour, IHasColor
     private void Awake()
     {
         #region Get Components
+        trailRend = GetComponentInChildren<TrailRenderer>();
         sprRend = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
@@ -49,13 +52,16 @@ public class PlayerController : MonoBehaviour, IHasColor
             col.enabled = true;
         }
 
+        if (rb.velocity.y > maxJumpSpeed)
+            rb.velocity = new Vector2(rb.velocity.x, maxJumpSpeed);
+
         Move();
 
         HandleColorChange();
 
         if (this.transform.position.x < -borderCoords)
             this.transform.position = new Vector2(-borderCoords, this.transform.position.y);
-        else if(this.transform.position.x > borderCoords)
+        else if (this.transform.position.x > borderCoords)
             this.transform.position = new Vector2(borderCoords, this.transform.position.y);
     }
 
@@ -73,6 +79,10 @@ public class PlayerController : MonoBehaviour, IHasColor
         }
     }
 
+    private void ChangeTrailColor()
+    {
+    }
+
     private void Move()
     {
         float moveVal = Input.GetAxis("Horizontal");
@@ -86,6 +96,14 @@ public class PlayerController : MonoBehaviour, IHasColor
     {
         ActiveColor = ColorManager.Instance.GetColorByID(_color);
         sprRend.color = ActiveColor.Color;
+
+
+        Color.RGBToHSV(ActiveColor.Color, out float H, out float S, out float V);
+        V *= .8f;
+        Color newColor = Color.HSVToRGB(H, S, V);
+
+        trailRend.endColor = newColor;
+        trailRend.startColor = newColor;
     }
 
     public void SetToNextColorInCycle()

@@ -7,6 +7,7 @@ public class BlockManager : MonoBehaviour
 {
     [SerializeField] private SolidBlock blockPrefab;
     [SerializeField] private PlayerController player;
+    [SerializeField] private ParticleSystem particles;
 
     private List<SolidBlock> blocks = new List<SolidBlock>();
     private ObjectPool<SolidBlock> pool;
@@ -44,7 +45,7 @@ public class BlockManager : MonoBehaviour
         for (int i = 0; i < blocksToSpawn; i++)
         {
             spawnX = (int)Random.Range(-camSize, camSize);
-            spawnY = (int)this.transform.position.y + (int)Random.Range(-camSize, camSize);
+            spawnY = (int)this.transform.position.y + (int)Random.Range(-camSize/2f, camSize);
 
             pool.Get();
         }
@@ -144,6 +145,14 @@ public class BlockManager : MonoBehaviour
 
     private void DestroyBlock(SolidBlock _block)
     {
+
+        // Set particle system
+        var psM = particles.main;
+        psM.startColor = _block.ActiveColor.Color;
+        particles.transform.position = _block.transform.position;
+        particles.Play();
+
+        // Release block from pool
         ReleaseBlock(_block);
     }
 
