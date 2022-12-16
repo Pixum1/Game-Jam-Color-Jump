@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class SolidBlock : MonoBehaviour, IHasColor
 
     private EdgeCollider2D col;
     private SpriteRenderer sprRend;
+
+    public Action<SolidBlock> e_BlockDestroyed;
 
     public void Init(ColorID _color)
     {
@@ -46,5 +49,10 @@ public class SolidBlock : MonoBehaviour, IHasColor
     {
         SetColor(ColorManager.Instance.GetPreviousColorInCycle(ActiveColor.ColorID));
 
+    }
+
+    public void DestroyColorObject()
+    {
+        e_BlockDestroyed?.Invoke(this);
     }
 }

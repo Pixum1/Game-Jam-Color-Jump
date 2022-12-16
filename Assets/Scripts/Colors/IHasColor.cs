@@ -7,4 +7,5 @@ public interface IHasColor
     public void SetColor(ColorID _color);
     public void SetToNextColorInCycle();
     public void SetToPreviousColorInCycle();
+    public void DestroyColorObject();
 }

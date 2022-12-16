@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour, IHasColor
     private BoxCollider2D col;
     private Animator anim;
 
+    private float borderCoords { get { return Camera.main.orthographicSize * 1.333f; } }
+
     private void Awake()
     {
         #region Get Components
@@ -29,6 +31,8 @@ public class PlayerController : MonoBehaviour, IHasColor
     private void Start()
     {
         SetColor(ColorID.Red);
+
+        e_ColorChanged?.Invoke();
     }
 
     private void Update()
@@ -48,6 +52,11 @@ public class PlayerController : MonoBehaviour, IHasColor
         Move();
 
         HandleColorChange();
+
+        if (this.transform.position.x < -borderCoords)
+            this.transform.position = new Vector2(-borderCoords, this.transform.position.y);
+        else if(this.transform.position.x > borderCoords)
+            this.transform.position = new Vector2(borderCoords, this.transform.position.y);
     }
 
     private void HandleColorChange()
@@ -91,8 +100,19 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     private void OnCollisionEnter2D(Collision2D _other)
     {
-        if (_other.gameObject.GetComponent<IHasColor>() != null)
+        IHasColor otherObject = _other.gameObject.GetComponent<IHasColor>();
+
+        if (otherObject != null)
+        {
             Jump();
+            otherObject.DestroyColorObject();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D _other)
+    {
+        if (_other.CompareTag("Player"))
+            DestroyColorObject();
     }
 
     private void Jump()
@@ -101,4 +121,8 @@ public class PlayerController : MonoBehaviour, IHasColor
         rb.AddForce(Vector2.up * jumpForce);
     }
 
+    public void DestroyColorObject()
+    {
+        Destroy(this.gameObject);
+    }
 }

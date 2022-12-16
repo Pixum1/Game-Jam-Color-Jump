@@ -102,7 +102,7 @@ public class BlockManager : MonoBehaviour
     {
         SolidBlock block = Instantiate(blockPrefab);
         block.Init(ColorManager.Instance.GetRandomColor());
-
+        block.e_BlockDestroyed += DestroyBlock;
         block.transform.position = new Vector3(spawnX, spawnY);
 
         blocks.Add(block);
@@ -140,6 +140,11 @@ public class BlockManager : MonoBehaviour
             _block.ActivateBlock();
         else
             _block.DeactivateBlock();
+    }
+
+    private void DestroyBlock(SolidBlock _block)
+    {
+        ReleaseBlock(_block);
     }
 
     private void OnDisable()
