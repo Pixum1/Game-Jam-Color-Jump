@@ -70,31 +70,23 @@ public class PlayerController : MonoBehaviour, IHasColor
     private void HandleColorChange()
     {
         if (Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
-        {
-            if (!started)
-            {
-                GameManager.Instance.Started = true;
-                started = true;
-                Time.timeScale = 1;
-                return;
-            }
-
             SetToPreviousColorInCycle();
-            e_ColorChanged?.Invoke();
-        }
-        if (Input.GetKeyDown(KeyCode.C) || Input.GetMouseButtonDown(1))
-        {
-            if (!started)
-            {
-                GameManager.Instance.Started = true;
-                started = true;
-                Time.timeScale = 1;
-                return;
-            }
 
+        else if (Input.GetKeyDown(KeyCode.C) || Input.GetMouseButtonDown(1))
             SetToNextColorInCycle();
-            e_ColorChanged?.Invoke();
+
+        else
+            return;
+
+        if (!started)
+        {
+            GameManager.Instance.Started = true;
+            started = true;
+            Time.timeScale = 1;
         }
+
+        //StartCoroutine(CameraController.Shake(0.05f, 0.1f));
+        e_ColorChanged?.Invoke();
     }
 
     private void Move()

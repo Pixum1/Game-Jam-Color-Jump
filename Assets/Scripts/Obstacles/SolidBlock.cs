@@ -25,7 +25,7 @@ public class SolidBlock : MonoBehaviour, IHasColor
     public void DeactivateBlock()
     {
         col.enabled = false;
-        sprRend.color = new Color(sprRend.color.r, sprRend.color.g, sprRend.color.b, .5f);
+        sprRend.color = new Color(sprRend.color.r, sprRend.color.g, sprRend.color.b, .25f);
 
     }
     public void ActivateBlock()

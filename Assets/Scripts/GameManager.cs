@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public bool Started;
+    [HideInInspector] public bool Started;
 
     private void Start()
     {

@@ -165,6 +165,7 @@ public class BlockManager : MonoBehaviour
         psM.startColor = _block.ActiveColor.Color;
         particles.transform.position = _block.transform.position;
         particles.Play();
+        StartCoroutine(CameraController.Shake(0.1f, 0.3f));
 
         // Release block from pool
         ReleaseBlock(_block);
