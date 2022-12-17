@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour, IHasColor
     public Action e_ColorChanged;
 
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpForce;
     [SerializeField] private float maxJumpSpeed;
 
     private TrailRenderer trailRend;
@@ -102,9 +101,7 @@ public class PlayerController : MonoBehaviour, IHasColor
     {
         float moveVal = Input.GetAxis("Horizontal");
 
-        rb.AddForce(Vector2.right * moveVal * moveSpeed);
-        if (Mathf.Abs(rb.velocity.x) > 5)
-            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * 5, rb.velocity.y); //Clamp velocity when max speed is reached!
+        rb.velocity = new Vector2(moveVal * moveSpeed, rb.velocity.y);
     }
 
     public void SetColor(ColorID _color)
@@ -155,7 +152,7 @@ public class PlayerController : MonoBehaviour, IHasColor
     private void Jump()
     {
         anim.SetTrigger("Jump");
-        rb.AddForce(Vector2.up * jumpForce);
+        rb.velocity = new Vector2(rb.velocity.x, maxJumpSpeed);
     }
 
     public void DestroyColorObject()

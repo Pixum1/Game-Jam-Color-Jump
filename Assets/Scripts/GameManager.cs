@@ -13,17 +13,15 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
 
-        Application.targetFrameRate = (int)Screen.mainWindowDisplayInfo.refreshRate.value;
+        //Application.targetFrameRate = (int)Screen.mainWindowDisplayInfo.refreshRate.value;
     }
 
     private void Update()
     {
-        if (Started)
-        {
-            if (Time.timeScale <= 2)
-                Time.timeScale += Time.deltaTime * Time.deltaTime / 2f;
-        }
-
-        Debug.Log(Time.timeScale);
+        //if (Started)
+        //{
+        //    if (Time.timeScale <= 2)
+        //        Time.timeScale += Time.deltaTime * Time.deltaTime / 2f;
+        //}
     }
 }

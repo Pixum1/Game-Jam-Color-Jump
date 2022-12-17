@@ -45,22 +45,14 @@ public class BlockManager : MonoBehaviour
         for (int i = 0; i < blocksToSpawn; i++)
         {
             spawnX = (int)Random.Range(-camSize, camSize);
-            spawnY = (int)this.transform.position.y + (int)Random.Range(-camSize / 2f, camSize);
+            spawnY = (int)this.transform.position.y + (int)Random.Range(0, camSize);
 
-            int limit = 100;
-
-            while (BlockOnSameLevel(new Vector2(spawnX, spawnY)))
-            {
-                if (limit <= 0) break;
-
-                spawnX = (int)Random.Range(-camSize, camSize);
-                spawnY = (int)this.transform.position.y + (int)Random.Range(-camSize / 2f, camSize);
-
-                limit--;
-            }
+            if (BlockOnSameLevel(new Vector2(spawnX, spawnY))) continue;
 
             pool.Get();
         }
+
+        SpawnNewBlocksOnBorder(blocksToSpawn);
     }
 
     void Update()
@@ -70,18 +62,22 @@ public class BlockManager : MonoBehaviour
         ReleaseOutOfBoundsBlocks();
     }
 
-    private void SpawnNewBlocksOnBorder()
+    private void SpawnNewBlocksOnBorder(int _extraAmount = 0)
     {
-        if (blocksToSpawn > pool.CountActive)
+        if (blocksToSpawn + _extraAmount > pool.CountActive)
         {
-            for (int i = 0; i < blocksToSpawn - pool.CountActive; i++)
+            int yMod = 1;
+
+            for (int i = 0; i < blocksToSpawn + _extraAmount - pool.CountActive; i++)
             {
                 spawnX = (int)Random.Range(-camSize, camSize);
-                spawnY = (int)this.transform.position.y + (int)camSize + (int)Random.Range(1f, 4f);
+                spawnY = (int)this.transform.position.y + (int)camSize + yMod;
 
                 if (BlockOnSameLevel(new Vector2(spawnX, spawnY))) continue;
 
                 pool.Get();
+
+                yMod++;
             }
         }
     }

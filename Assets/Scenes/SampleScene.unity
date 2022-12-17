@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75d14ffb86f71a4c9828224e2cac4b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Started: 0
 --- !u!4 &63513223
 Transform:
   m_ObjectHideFlags: 0
@@ -5258,7 +5259,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5315,7 +5316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5588,7 +5589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5645,7 +5646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5702,7 +5703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5808,7 +5809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5875,7 +5876,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5952,8 +5953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5bd4d6779fd0647b5d7150d716650f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 500
-  jumpForce: 1000
+  moveSpeed: 10
   maxJumpSpeed: 20
 --- !u!50 &1857081310
 Rigidbody2D:
@@ -5971,10 +5971,10 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 2
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_Material: {fileID: 6200000, guid: ce0e1913650758a4092059439b62fe18, type: 2}
+  m_Interpolate: 1
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &1857081311
 BoxCollider2D:
@@ -6148,7 +6148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1694398848298535431, guid: f02d57a3b9a155f449d79603ac500561, type: 3}
       propertyPath: m_LocalPosition.x
