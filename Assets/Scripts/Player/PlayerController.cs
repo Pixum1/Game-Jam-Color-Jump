@@ -10,15 +10,20 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxJumpSpeed;
+    [SerializeField] private float colorSwitchCooldown;
+
+    [SerializeField] private GameObject colorWheel;
 
     private TrailRenderer trailRend;
     private SpriteRenderer sprRend;
     private Rigidbody2D rb;
     private BoxCollider2D col;
     private Animator anim;
-    private bool started;
 
-    private float borderCoords { get { return Camera.main.orthographicSize * 1.333f; } }
+    private float colorSwitchTimer;
+    private float switchTime { get { return colorSwitchCooldown / Time.timeScale; } } // Scales down with increasing time scale
+
+    private float borderCoords { get { return Camera.main.orthographicSize + (Camera.main.orthographicSize / 2); } }
 
     private void Awake()
     {
@@ -33,19 +38,30 @@ public class PlayerController : MonoBehaviour, IHasColor
 
     private void Start()
     {
+        colorSwitchTimer = switchTime;
+        rb.gravityScale = 0;
+
+        // Set player gravity when game starts
+        GameManager.Instance.e_GameStarted += Init;
+    }
+
+    private void Init()
+    {
+        rb.gravityScale = 2;
         SetColor(ColorID.Red);
-
         e_ColorChanged?.Invoke();
-
-        Time.timeScale = 0;
     }
 
     private void Update()
     {
+        if (GameManager.Instance.GameState != EGameState.Running) return;
+
         HandleColorChange();
 
+        // Reset horizontal velocity
         rb.velocity = new Vector2(0, rb.velocity.y);
 
+        #region Falling & Jumping
         if (rb.velocity.y > 0)
         {
             col.enabled = false;
@@ -58,17 +74,34 @@ public class PlayerController : MonoBehaviour, IHasColor
 
         if (rb.velocity.y > maxJumpSpeed)
             rb.velocity = new Vector2(rb.velocity.x, maxJumpSpeed);
+        #endregion
 
         Move();
 
-        if (this.transform.position.x < -borderCoords)
-            this.transform.position = new Vector2(-borderCoords, this.transform.position.y);
-        else if (this.transform.position.x > borderCoords)
-            this.transform.position = new Vector2(borderCoords, this.transform.position.y);
+        #region Flip Sprite
+        if (rb.velocity.x > 0)
+            sprRend.flipX = false;
+        else if (rb.velocity.x < 0)
+            sprRend.flipX = true;
+        #endregion
+
+        // Kepp in bounds
+        this.transform.position = new Vector3(Mathf.Clamp(transform.position.x, -borderCoords, borderCoords), this.transform.position.y);
+
+        // Destroy when out of bounds
+        if (transform.position.y < Camera.main.transform.position.y - Camera.main.orthographicSize - 4)
+        {
+            DestroyColorObject();
+            GameManager.Instance.GameOver();
+        }
+
+        colorSwitchTimer -= Time.deltaTime;
     }
 
     private void HandleColorChange()
     {
+        if (colorSwitchTimer >= 0) return;
+
         if (Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
             SetToPreviousColorInCycle();
 
@@ -78,15 +111,9 @@ public class PlayerController : MonoBehaviour, IHasColor
         else
             return;
 
-        if (!started)
-        {
-            GameManager.Instance.Started = true;
-            started = true;
-            Time.timeScale = 1;
-        }
-
-        //StartCoroutine(CameraController.Shake(0.05f, 0.1f));
         e_ColorChanged?.Invoke();
+
+        colorSwitchTimer = switchTime;
     }
 
     private void Move()
@@ -110,19 +137,50 @@ public class PlayerController : MonoBehaviour, IHasColor
         trailRend.startColor = newColor;
     }
 
+    private IEnumerator RotateMe(Vector3 _byAngles, float _inTime)
+    {
+        Quaternion fromAngle = colorWheel.transform.rotation;
+        Quaternion toAngle = Quaternion.Euler(colorWheel.transform.eulerAngles + _byAngles);
+
+        for (float t = 0f; t < 1; t += Time.deltaTime / _inTime)
+        {
+            colorWheel.transform.rotation = Quaternion.Lerp(fromAngle, toAngle, t);
+            yield return null;
+        }
+
+        colorWheel.transform.rotation = toAngle;
+
+        switch (ActiveColor.ColorID)
+        {
+            case ColorID.Red:
+                colorWheel.transform.eulerAngles = new Vector3(0, 0, 0);
+                break;
+            case ColorID.Green:
+                colorWheel.transform.eulerAngles = new Vector3(0, 0, 90);
+                break;
+            case ColorID.Blue:
+                colorWheel.transform.eulerAngles = new Vector3(0, 0, -180);
+                break;
+            case ColorID.Yellow:
+                colorWheel.transform.eulerAngles = new Vector3(0, 0, -90);
+                break;
+        }
+    }
+
     public void SetToNextColorInCycle()
     {
         SetColor(ColorManager.Instance.GetNextColorInCycle(ActiveColor.ColorID));
+        StartCoroutine(RotateMe(new Vector3(0, 0, 90), switchTime));
     }
     public void SetToPreviousColorInCycle()
     {
         SetColor(ColorManager.Instance.GetPreviousColorInCycle(ActiveColor.ColorID));
-
+        StartCoroutine(RotateMe(new Vector3(0, 0, -90), switchTime));
     }
 
     private void OnCollisionEnter2D(Collision2D _other)
     {
-        if (!started) return;
+        if (GameManager.Instance.GameState != EGameState.Running) return;
 
         IHasColor otherObject = _other.gameObject.GetComponent<IHasColor>();
 
@@ -133,22 +191,16 @@ public class PlayerController : MonoBehaviour, IHasColor
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D _other)
-    {
-        if (!started) return;
-
-        if (_other.CompareTag("Player"))
-            DestroyColorObject();
-    }
-
     private void Jump()
     {
         anim.SetTrigger("Jump");
         rb.velocity = new Vector2(rb.velocity.x, maxJumpSpeed);
+        GameManager.Instance.PlayJumpSound(EAudioClip.Jump);
     }
 
     public void DestroyColorObject()
     {
+        GameManager.Instance.PlayJumpSound(EAudioClip.Death);
         Destroy(this.gameObject);
     }
 }

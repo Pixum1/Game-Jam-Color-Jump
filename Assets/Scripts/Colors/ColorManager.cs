@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ColorManager : MonoBehaviour
 {
@@ -8,10 +9,20 @@ public class ColorManager : MonoBehaviour
 
     [SerializeField] private ColorContainer container;
 
+    [SerializeField] private Image upperWheel;
+    [SerializeField] private Image rightWheel;
+    [SerializeField] private Image lowerWheel;
+    [SerializeField] private Image leftWheel;
+
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
+
+        upperWheel.color = GetColorByID(ColorID.Red).Color;
+        rightWheel.color = GetColorByID(ColorID.Green).Color;
+        lowerWheel.color = GetColorByID(ColorID.Blue).Color;
+        leftWheel.color = GetColorByID(ColorID.Yellow).Color;
     }
 
     public ScriptableColor GetColorByID(ColorID _id)

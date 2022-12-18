@@ -42,10 +42,15 @@ public class BlockManager : MonoBehaviour
             }
         );
 
+        GameManager.Instance.e_GameStarted += SpawnStartBlocks;
+    }
+
+    private void SpawnStartBlocks()
+    {
         for (int i = 0; i < blocksToSpawn; i++)
         {
             spawnX = (int)Random.Range(-camSize, camSize);
-            spawnY = (int)this.transform.position.y + (int)Random.Range(0, camSize);
+            spawnY = (int)this.transform.position.y + (int)Random.Range(0 - camSize / 2f, camSize);
 
             if (BlockOnSameLevel(new Vector2(spawnX, spawnY))) continue;
 
@@ -159,7 +164,6 @@ public class BlockManager : MonoBehaviour
 
     private void DestroyBlock(SolidBlock _block)
     {
-
         // Set particle system
         var psM = particles.main;
         psM.startColor = _block.ActiveColor.Color;

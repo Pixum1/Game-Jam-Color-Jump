@@ -54,5 +54,7 @@ public class SolidBlock : MonoBehaviour, IHasColor
     public void DestroyColorObject()
     {
         e_BlockDestroyed?.Invoke(this);
+
+        GameManager.Instance.IncreaseScore(100);
     }
 }
