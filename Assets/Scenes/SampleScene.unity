@@ -165,6 +165,9 @@ MonoBehaviour:
   speakerImg: {fileID: 226146955}
   speakerEnabledSpr: {fileID: 21300000, guid: b0d3f1b6f7808d5448506e69dc5b6bb3, type: 3}
   speakerDisabledSpr: {fileID: 21300000, guid: 929754d736eaa1441bf84f4a24644bc3, type: 3}
+  musicImg: {fileID: 1126465035}
+  musicEnabledSpr: {fileID: 21300000, guid: be566f2dff63b3e4a86fd5c86cf5d5c9, type: 3}
+  musicDisabledSpr: {fileID: 21300000, guid: 12e3d9ee89134fe4dab36a8b1557758a, type: 3}
   audioSource: {fileID: 63513224}
   jumpSound: {fileID: 8300000, guid: c7e205a28e579a7469f9e196d61950ae, type: 3}
   DieSound: {fileID: 8300000, guid: 628d949500b2fc84b9c5d6aa738a69a0, type: 3}
@@ -192,7 +195,7 @@ AudioSource:
   m_GameObject: {fileID: 63513221}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: c8002a635722d5d44ab1c8a2319e48b9, type: 2}
+  OutputAudioMixerGroup: {fileID: -290315000479296206, guid: c8002a635722d5d44ab1c8a2319e48b9, type: 2}
   m_audioClip: {fileID: 8300000, guid: c7e205a28e579a7469f9e196d61950ae, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -7029,7 +7032,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b0d3f1b6f7808d5448506e69dc5b6bb3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: be566f2dff63b3e4a86fd5c86cf5d5c9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

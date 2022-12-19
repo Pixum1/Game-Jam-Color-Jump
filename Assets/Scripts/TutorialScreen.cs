@@ -9,7 +9,7 @@ public class TutorialScreen : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.anyKeyDown)
             StartCoroutine(LoadNextScene());
     }
 

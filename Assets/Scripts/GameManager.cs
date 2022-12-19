@@ -46,6 +46,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image speakerImg;
     [SerializeField] private Sprite speakerEnabledSpr;
     [SerializeField] private Sprite speakerDisabledSpr;
+    [SerializeField] private Image musicImg;
+    [SerializeField] private Sprite musicEnabledSpr;
+    [SerializeField] private Sprite musicDisabledSpr;
     [SerializeField] private AudioSource audioSource;
 
     [Header("Sounds")]
@@ -66,17 +69,19 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         #region Adjust Sound Settings
-        mixer.GetFloat("Master", out float volume);
+        mixer.GetFloat("SFX", out float sfxvolume);
+        mixer.GetFloat("Music", out float musicvolume);
 
-        if (volume == -80)
-        {
+        if (sfxvolume == -80)
             speakerImg.sprite = speakerDisabledSpr;
-        }
 
-        else if (volume == 0)
-        {
+        else if (sfxvolume == 0)
             speakerImg.sprite = speakerEnabledSpr;
-        }
+
+        if (musicvolume == -80)
+            musicImg.sprite = musicDisabledSpr;
+        else if (musicvolume == -35)
+            musicImg.sprite = musicEnabledSpr;
         #endregion
 
         Time.timeScale = 1;
@@ -135,13 +140,26 @@ public class GameManager : MonoBehaviour
 
         if (volume == -80)
         {
-            speakerImg.sprite = speakerEnabledSpr;
-            mixer.SetFloat(_mixerName, 0);
+            if (_mixerName == "SFX")
+            {
+                mixer.SetFloat(_mixerName, 0);
+                speakerImg.sprite = speakerEnabledSpr;
+            }
+            if (_mixerName == "Music")
+            {
+                mixer.SetFloat(_mixerName, -35);
+                musicImg.sprite = musicEnabledSpr;
+            }
         }
 
         else if (volume == 0)
         {
             speakerImg.sprite = speakerDisabledSpr;
+            mixer.SetFloat(_mixerName, -80);
+        }
+        else if (volume == -35)
+        {
+            musicImg.sprite = musicDisabledSpr;
             mixer.SetFloat(_mixerName, -80);
         }
     }

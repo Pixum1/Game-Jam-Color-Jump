@@ -1707,7 +1707,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press [esc] to continue
+  m_text: Press [any key] to continue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4b0748cfbdef4064fb571b43d358b1b3, type: 2}
   m_sharedMaterial: {fileID: 750697222527713131, guid: 4b0748cfbdef4064fb571b43d358b1b3, type: 2}
