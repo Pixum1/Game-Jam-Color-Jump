@@ -7,10 +7,15 @@ public class TutorialScreen : MonoBehaviour
 {
     [SerializeField] private Animator anim;
 
+    private float timer = 0;
+
     void Update()
     {
-        if (Input.anyKeyDown)
-            StartCoroutine(LoadNextScene());
+        if (timer >= 5f)
+            if (Input.anyKeyDown)
+                StartCoroutine(LoadNextScene());
+
+        timer += Time.unscaledDeltaTime;
     }
 
     private IEnumerator LoadNextScene()
