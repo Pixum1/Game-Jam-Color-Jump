@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text gameOverScoreText;
     [SerializeField] private GameObject colorWheelObj;
     [SerializeField] private TMP_Text countdownText;
+    [SerializeField] private Animator blackFade;
 
     [Header("Audio")]
     [SerializeField] private AudioMixer mixer;
@@ -75,13 +76,10 @@ public class GameManager : MonoBehaviour
         else if (volume == 0)
         {
             speakerImg.sprite = speakerEnabledSpr;
-        } 
+        }
         #endregion
 
         Time.timeScale = 1;
-
-        scoreText.color = ColorManager.Instance.GetColorByID(ColorID.Yellow).Color;
-        gameOverScoreText.color = ColorManager.Instance.GetColorByID(ColorID.Yellow).Color;
     }
 
     private void Update()
@@ -111,7 +109,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = $"Score: {score}";
         gameOverScoreText.text = $"Score:\n{score}";
 
-        if(!Application.isFocused && GameState == EGameState.Running)
+        if (!Application.isFocused && GameState == EGameState.Running)
             PauseGame();
     }
 
@@ -200,7 +198,23 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(0);
+        StartCoroutine(LoadGameOver());
+    }
+
+    private IEnumerator LoadGameOver()
+    {
+        blackFade.SetTrigger("FadeIn");
+
+        float counter = 0;
+        float waitTime = blackFade.GetCurrentAnimatorStateInfo(0).length;
+
+        while (counter < waitTime)
+        {
+            counter += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        SceneManager.LoadScene(1);
     }
 
     public void PauseGame()
