@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
         if (musicvolume == -80)
             musicImg.sprite = musicDisabledSpr;
-        else if (musicvolume == -35)
+        else if (musicvolume == -17)
             musicImg.sprite = musicEnabledSpr;
         #endregion
 
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
             }
             if (_mixerName == "Music")
             {
-                mixer.SetFloat(_mixerName, -35);
+                mixer.SetFloat(_mixerName, -17);
                 musicImg.sprite = musicEnabledSpr;
             }
         }
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
             speakerImg.sprite = speakerDisabledSpr;
             mixer.SetFloat(_mixerName, -80);
         }
-        else if (volume == -35)
+        else if (volume == -17)
         {
             musicImg.sprite = musicDisabledSpr;
             mixer.SetFloat(_mixerName, -80);
