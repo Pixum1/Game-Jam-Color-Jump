@@ -129,20 +129,20 @@ public class GameManager : MonoBehaviour
 
         audioSource.Play();
     }
-    public void ToggleSound()
+    public void ToggleSound(string _mixerName)
     {
-        mixer.GetFloat("Master", out float volume);
+        mixer.GetFloat(_mixerName, out float volume);
 
         if (volume == -80)
         {
             speakerImg.sprite = speakerEnabledSpr;
-            mixer.FindSnapshot("Unmuted").TransitionTo(0);
+            mixer.SetFloat(_mixerName, 0);
         }
 
         else if (volume == 0)
         {
             speakerImg.sprite = speakerDisabledSpr;
-            mixer.FindSnapshot("Muted").TransitionTo(0);
+            mixer.SetFloat(_mixerName, -80);
         }
     }
 
