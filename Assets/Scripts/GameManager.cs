@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
 
     private float timeScaleSave = 1;
     private int score = 0;
+    private float desiredMusicVolume = -25;
 
     private void Awake()
     {
@@ -80,7 +81,8 @@ public class GameManager : MonoBehaviour
 
         if (musicvolume == -80)
             musicImg.sprite = musicDisabledSpr;
-        else if (musicvolume == -17)
+
+        else if (musicvolume == desiredMusicVolume)
             musicImg.sprite = musicEnabledSpr;
         #endregion
 
@@ -147,7 +149,7 @@ public class GameManager : MonoBehaviour
             }
             if (_mixerName == "Music")
             {
-                mixer.SetFloat(_mixerName, -17);
+                mixer.SetFloat(_mixerName, desiredMusicVolume);
                 musicImg.sprite = musicEnabledSpr;
             }
         }
@@ -157,7 +159,7 @@ public class GameManager : MonoBehaviour
             speakerImg.sprite = speakerDisabledSpr;
             mixer.SetFloat(_mixerName, -80);
         }
-        else if (volume == -17)
+        else if (volume == desiredMusicVolume)
         {
             musicImg.sprite = musicDisabledSpr;
             mixer.SetFloat(_mixerName, -80);
